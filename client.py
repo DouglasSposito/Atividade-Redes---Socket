@@ -8,7 +8,7 @@ def client(host = 'localhost', port=8082):
     print ("Conectando em %s na porta %s" % server_address) 
     sock.connect(server_address) 
     
-    mensagem = input("Digite aqui a mensagem a ser enviada")
+    msn = input("Digite aqui a mensagem a ser enviada: ")
     try: 
         
         print ("Enviando: %s" % mensagem) 
@@ -25,10 +25,12 @@ def client(host = 'localhost', port=8082):
         print ("Erro no socket: %s" %str(e)) 
     except Exception as e: 
         print ("Excecao generica: %s" %str(e)) 
-    decisao = int(input("Deseja fechar a conexão ? /n 1 Sim /n 2 Não"))
+    decisao = int(input("Deseja fechar a conexão ? \n 1 Sim \n 2 Não \n"))
     if decisao == 1:
         print ("Fechando conexao com o servidor.") 
-        sock.close() 
+        sock.close()
+    else:
+        msn = input("Digite uma nova mensagem")
     
                   
 client()

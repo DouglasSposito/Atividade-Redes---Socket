@@ -14,10 +14,12 @@ def server(host = 'localhost', port=8082):
     
     sock.listen(5) 
     i = 0
+    clients=[]
     while True: 
         print ("Aguardando mensagens de clientes")
         client, address = sock.accept() 
         data = client.recv(data_payload) 
+        clients.append(client)
         if data:
             print ("Dados: %s" %data)
             client.send(data)
