@@ -11,12 +11,12 @@ def client(host = 'localhost', port=8082):
     mensagem = input("Digite aqui a mensagem a ser enviada")
     try: 
         
-        print ("Enviando: %s" % message) 
-        sock.sendall(message.encode('utf-8')) 
+        print ("Enviando: %s" % mensagem) 
+        sock.sendall(mensagem.encode('utf-8')) 
         
         # Tratando a resposta 
         amount_received = 0 
-        amount_expected = len(message) 
+        amount_expected = len(mensagem) 
         while amount_received < amount_expected: 
             data = sock.recv(16) 
             amount_received += len(data) 
@@ -25,8 +25,10 @@ def client(host = 'localhost', port=8082):
         print ("Erro no socket: %s" %str(e)) 
     except Exception as e: 
         print ("Excecao generica: %s" %str(e)) 
-    finally: 
+    decisao = int(input("Deseja fechar a conexão ? /n 1 Sim /n 2 Não"))
+    if decisao == 1:
         print ("Fechando conexao com o servidor.") 
         sock.close() 
-
+    
+                  
 client()
