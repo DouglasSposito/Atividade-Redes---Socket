@@ -8,9 +8,9 @@ def client(host = 'localhost', port=8082):
     print ("Conectando em %s na porta %s" % server_address) 
     sock.connect(server_address) 
     
+    mensagem = input("Digite aqui a mensagem a ser enviada")
     try: 
         
-        message = "Mensagem de teste. Isto deve ser enviado" 
         print ("Enviando: %s" % message) 
         sock.sendall(message.encode('utf-8')) 
         
