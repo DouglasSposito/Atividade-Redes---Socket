@@ -1,36 +1,38 @@
-
 import socket
-def client(host = 'localhost', port=8082): 
-    
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-    
-    server_address = (host, port) 
-    print ("Conectando em %s na porta %s" % server_address) 
-    sock.connect(server_address) 
-    
-    msn = input("Digite aqui a mensagem a ser enviada: ")
-    try: 
-        
-        print ("Enviando: %s" % mensagem) 
-        sock.sendall(mensagem.encode('utf-8')) 
-        
-        # Tratando a resposta 
-        amount_received = 0 
-        amount_expected = len(mensagem) 
-        while amount_received < amount_expected: 
-            data = sock.recv(16) 
-            amount_received += len(data) 
-            print ("Recebido: %s" % data) 
-    except socket.error as e: 
-        print ("Erro no socket: %s" %str(e)) 
-    except Exception as e: 
-        print ("Excecao generica: %s" %str(e)) 
-    decisao = int(input("Deseja fechar a conexão ? \n 1 Sim \n 2 Não \n"))
-    if decisao == 1:
-        print ("Fechando conexao com o servidor.") 
-        sock.close()
-    else:
-        msn = input("Digite uma nova mensagem")
-    
-                  
-client()
+import threading
+
+# Escolha um apelido
+nickname = input("Escolha seu apelido: ")
+
+# Conecta ao servidor
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 65432))
+
+# Escuta as mensagens do servidor e envia o apelido
+def receive():
+    while True:
+        try:
+            # Recebe a mensagem do servidor
+            message = client.recv(1024).decode('utf-8')
+            if message == 'NICK':
+                client.send(nickname.encode('utf-8'))
+            else:
+                print(message)
+        except:
+            # Fecha a conexão se algo der errado
+            print("Ocorreu um erro!")
+            client.close()
+            break
+
+# Envia mensagens para o servidor
+def write():
+    while True:
+        message = f'{nickname}: {input("")}'
+        client.send(message.encode('utf-8'))
+
+# Inicia as threads para escutar e escrever
+receive_thread = threading.Thread(target=receive)
+receive_thread.start()
+
+write_thread = threading.Thread(target=write)
+write_thread.start()
