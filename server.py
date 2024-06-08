@@ -12,7 +12,7 @@ server.listen()
 
 # Lista para manter as conexões dos clientes
 clients = []
-nicknames = []
+nicks = []
 
 # Envia a mensagem para todos os clientes conectados
 def broadcast(message):
@@ -31,9 +31,9 @@ def handle(client):
             index = clients.index(client)
             clients.remove(client)
             client.close()
-            nickname = nicknames[index]
+            nickname = nicks[index]
             broadcast(f'{nickname} saiu do chat!'.encode('utf-8'))
-            nicknames.remove(nickname)
+            nicks.remove(nickname)
             break
 
 # Recebe conexões de novos clientes
@@ -45,7 +45,7 @@ def receive():
         # Solicita e armazena o apelido do cliente
         client.send('NICK'.encode('utf-8'))
         nickname = client.recv(1024).decode('utf-8')
-        nicknames.append(nickname)
+        nicks.append(nickname)
         clients.append(client)
 
         # Imprime e transmite o apelido do novo cliente
@@ -57,5 +57,5 @@ def receive():
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
 
-print("Servidor está ouvindo...")
+print("Servidor está rodando")
 receive()

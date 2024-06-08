@@ -1,8 +1,7 @@
 import socket
 import threading
 
-# Escolha um apelido
-nickname = input("Escolha seu apelido: ")
+nick = input("Escolha seu apelido: ")
 
 # Conecta ao servidor
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,7 +14,7 @@ def receive():
             # Recebe a mensagem do servidor
             message = client.recv(1024).decode('utf-8')
             if message == 'NICK':
-                client.send(nickname.encode('utf-8'))
+                client.send(nick.encode('utf-8'))
             else:
                 print(message)
         except:
@@ -24,10 +23,10 @@ def receive():
             client.close()
             break
 
-# Envia mensagens para o servidor
+# Envia a mensagem para o servidor
 def write():
     while True:
-        message = f'{nickname}: {input("")}'
+        message = f'{nick}: {input("")}'
         client.send(message.encode('utf-8'))
 
 # Inicia as threads para escutar e escrever
